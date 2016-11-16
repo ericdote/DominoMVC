@@ -50,9 +50,9 @@ public class Torn {
     private boolean comprovaFitxa(Fitxa f, boolean extrem) {
         boolean correcte = false;
         if (extrem) {
-            if (f.getValors()[0] == joc.getFitxesJugades().getFirst().getValors()[1]) {
+            if (f.getValors()[1] == joc.getFitxesJugades().getFirst().getValors()[0]) {
                 correcte = true;
-            } else if (f.getValors()[1] == joc.getFitxesJugades().getFirst().getValors()[1]) {
+            } else if (f.getValors()[1] == joc.getFitxesJugades().getFirst().getValors()[0]) {
                 f.canviarOrientacio();
                 correcte = true;
             }

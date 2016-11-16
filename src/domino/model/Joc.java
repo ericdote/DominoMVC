@@ -7,11 +7,11 @@ import java.util.Random;
 public class Joc {
 
     public final int NUMJUGADORS, NUMFITXES, NUMFITXESJUGADOR;
-    private ArrayDeque<Fitxa> fitxesJugades;
+    public ArrayDeque<Fitxa> fitxesJugades;
     private ArrayList<Fitxa> fitxesInicials;
-    private Jugador[] jugadors;
+    public Jugador[] jugadors;
     private int comptPassar;
-    private int torn;
+    public int torn = -1;
     private boolean finalitzat;
     private Jugador guanyador;
     private Fitxa fitxaInicial;
@@ -191,7 +191,7 @@ public class Joc {
         return minimPunts;
     }
 
-    private Jugador trobarGuanyador() {
+    public Jugador trobarGuanyador() {
         Jugador guanya;
         ArrayList<Jugador> minimPunts = comptPunts();
         if (minimPunts.size() == 1) {

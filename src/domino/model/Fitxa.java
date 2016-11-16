@@ -2,7 +2,7 @@ package domino.model;
 
 public class Fitxa {
 
-    private int[] valors;
+    public int[] valors;
 
     public Fitxa(int[] valors) {
         this.valors = valors;
