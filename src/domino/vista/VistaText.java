@@ -1,8 +1,6 @@
 package domino.vista;
 
-import domino.control.ControlText;
 import domino.model.Fitxa;
-import domino.model.Joc;
 import domino.model.Jugador;
 import java.util.Deque;
 import java.util.List;
@@ -10,26 +8,26 @@ import java.util.Scanner;
 
 public class VistaText {
 
-    private final Scanner lector = new Scanner(System.in);
-    private Jugador jug;
-    private Joc joc;
-    private ControlText ct = new ControlText();
+    private Scanner lector;
 
-    /**
-     * Dades que es mostraran al principi de cada torn
-     *
-     * @param torn torn actual
-     * @param jugador jugador actual
-     */
-    public void dadesTorn(int torn, Jugador jugador) {
-        System.out.println("TORN: " + torn + "         " + jugador.getNom());
+    public VistaText() {
+        resetearScanner();
+
     }
 
     /**
-     * Mostra les fitxes jugades durant la partida
+     * Dades que es mostren al iniciar el torn
+     * @param torn actual
+     * @param jugador actual
+     */
+    public void dadesTorn(int torn, Jugador jugador) {
+        System.out.println("TORN: " + torn + "\t\t" + jugador.getNom());
+    }
+
+    /**
+     * Metode que mostra les fitxes jugades durant el transcurs de la partida
      *
-     * @param fitxesJugades arrayDeque que te les fitxes que s'han jugat durant
-     * la partida
+     * @param fitxesJugades arrayDeque que mostra les fitxes que s'han jugat
      */
     public void fitxesJugades(Deque<Fitxa> fitxesJugades) {
 
@@ -46,9 +44,9 @@ public class VistaText {
     }
 
     /**
-     * Mostra les fitxes del jugador
+     * Mostra les fitxes actuals del jugador
      *
-     * @param fitxes ArrayList que conte les fitxes del jugador
+     * @param fitxes arrayList del jugador que conte les fitxes
      */
     public void fitxesJugador(List<Fitxa> fitxes) {
         for (int i = 0; i < fitxes.size(); i++) {
@@ -57,11 +55,8 @@ public class VistaText {
     }
 
     /**
-     * Metode que mostra el menu per escogir una opcio La opcio es escogida amb
-     * el metode que comprova que entri un valor correcte
-     *
-     * @return la opcio escogida per en ControlText donar pas a la accio
-     * seleccionada
+     * Metode que mostra les opcions del menu i crida a comprovacioMenu per escogir la opcio.
+     * @return la opcio escogida
      */
     public int menu() {
         System.out.println("Escogeix la jugada: \n"
@@ -73,46 +68,15 @@ public class VistaText {
     }
 
     /**
-     * Mostra per pantalla un sout on es demana la posicio de la fitxa La fitxa
-     * s'escogeix amb comprovarPosicioFitxa.
-     *
-     * @param fitxas ArrayList de fitxes del jugador
-     * @return Torna la posicio de la fitxa seleccionada pel jugador -1 per
-     * indicar la posicio en l'array.
-     */
-    public int fitxaEscogida(List<Fitxa> fitxas) {
-        int fitxa;
-        do {
-            System.out.print("Introdueix la posicio de la fitxa que vols escogir: ");
-            fitxa = comprovarValorPosicio();
-            if (!ct.comprovarPosicioFitxa(fitxa)) {
-                System.out.print("No es valor correcte, introduiu un altre: ");
-            }
-        } while (!comprovarFitxa(fitxa, fitxas.size()));
-        return fitxa - 1;
-    }
-
-    public boolean comprovarFitxa(int fitxa, int fitxesJugador) {
-        boolean comprovar = false;
-        if (fitxa > 0 && fitxesJugador <= 7) {
-            comprovar = true;
-        }
-        return comprovar;
-    }
-
-    /**
-     * Demana el costat on volem col·locar la fitxa. I fa una comprovacio de que
-     * nomes es pugui col·locar la fitxa a esquerra o dreta
-     *
-     * @return Torna un boolean dient si es pot o no colocar la fitxa al costat
-     * escogit.
+     * Metode que demana la posicio on volem colocar la fitxa i realitza comprovacions
+     * @return torna el costat on es ficara
      */
     public boolean costatFitxa() {
         boolean costat = false;
         String orientacio;
         do {
             System.out.println("En quin costat voleu col·locar la fitxa? (E|D)");
-            orientacio = lector.next();
+            orientacio = lector.nextLine();
         } while (comprovarCostat(orientacio));
 
         if (orientacio.equals("e") || orientacio.equals("E")) {
@@ -124,19 +88,16 @@ public class VistaText {
     }
 
     /**
-     * Imprimeix el guanyador
-     *
-     * @param guanyador li entra per parametre el nom del guanyador
+     * Metode que imprimeix el guanyador del joc
+     * @param guanyador li entra per parametre el guanyador
      */
     public void imprimirGuanyador(Jugador guanyador) {
         System.out.println("El guanyador es: " + guanyador.getNom());
     }
 
     /**
-     * Metode fet per comprovar que entra un numero correcte y no una lletra o
-     * un numero invalid.
-     *
-     * @return Torna el numero de la opcio
+     * Metode que comprova que la opcio escogida pel menu es correcte.
+     * @return torna la opcio validada
      */
     public int comprovacioMenu() {
         int opcio = 0;
@@ -170,15 +131,42 @@ public class VistaText {
         }
         return comprovacio;
     }
-
-    public int comprovarValorPosicio() {
-        int posicio = 0;
-        if (lector.hasNextInt()) {
-            posicio = lector.nextInt();
-        } else {
-            System.out.println("Ha de ser un numero la posicio");
-        }
-        return posicio;
+    /**
+     * Aquest metode obte per parametre el jugador del torn i demana la posicio de la fitxa.
+     * Fa un bucle fins que obtenim un valor correcte de posicio (o 0 per sortir)
+     * Un cop obtingut retorna la posicio de la fitxa
+     * @param jugador li entra el jugador del torn acutal per parametre
+     * @return torna la posicio de la fitxa validada
+     */
+    public int comprovarValorPosicio(Jugador jugador) {
+        int num = 0;
+        System.out.print("Introdueix la posicio de la fitxa que vols escogir\n"
+                + "Si t'has equivocat i no tens cap fitxa per col·locar, posa 0: ");
+        do {
+            //Necessito aquest metode perque el apuntador per X motiu que desconec no apunta be.
+            resetearScanner();
+            String numero = lector.nextLine();
+            try {
+                num = Integer.parseInt(numero);
+                if (num > 0 && num < jugador.getFitxes().size() +1) {
+                    break;
+                } else if (num == 0) {
+                    break;
+                } else {
+                    System.out.print("Introdueix un valor adequat: ");
+                }
+            } catch (Exception e) {
+                System.out.print("Introdueix un numero: ");
+            }
+        } while (true);
+        return num;
     }
-
+    /**
+     * Aquest metode el necessitem per comprovarValorPosicio, ja que extranyament
+     * apunta malament al metode en questio i necessitem resetejarlo.
+     */
+    private void resetearScanner() {
+        lector = null;
+        lector = new Scanner(System.in);
+    }
 }

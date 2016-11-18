@@ -8,5 +8,4 @@ public class Domino {
         ControlText ct = new ControlText();
         ct.inici();
     }
-
 }
